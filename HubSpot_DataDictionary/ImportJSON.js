@@ -1,5 +1,3 @@
-
-
 /**
  * Retrieves all the rows in the active spreadsheet that contain data and logs the
  * values for each row.
