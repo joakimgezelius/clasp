@@ -1,0 +1,15 @@
+{
+  "timeZone": "Asia/Kolkata",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "WedLib",
+        "version": "0",
+        "libraryId": "1CiKOqQNFxdyAR5PZ7GaJDnGyZfrh-b-rJIlyCFAI2ABvu8yV1pCmm3ER",
+        "developmentMode": true
+      }
+    ]
+  }
+}
