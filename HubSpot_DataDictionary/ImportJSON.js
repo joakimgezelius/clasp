@@ -1,3 +1,34 @@
+function getHubSpotToken_() {
+  var token = PropertiesService.getScriptProperties().getProperty('HUBSPOT_PRIVATE_APP_TOKEN');
+  if (!token) {
+    throw new Error("Missing HUBSPOT_PRIVATE_APP_TOKEN in Script Properties.");
+  }
+  return token;
+}
+
+function hubspotFetch_(url, fetchOptions) {
+  var token = getHubSpotToken_();
+
+  var options = fetchOptions || {};
+  options.headers = options.headers || {};
+  options.headers.Authorization = "Bearer " + token;
+  options.muteHttpExceptions = true;
+
+  var resp = UrlFetchApp.fetch(url, options);
+  var code = resp.getResponseCode();
+  var text = resp.getContentText();
+
+  if (code < 200 || code >= 300) {
+    throw new Error("HubSpot request failed (" + code + "): " + text);
+  }
+  return resp;
+}
+
+function setHubSpotToken_(token) {
+  PropertiesService.getScriptProperties().setProperty('HUBSPOT_PRIVATE_APP_TOKEN', token);
+}
+
+
 /**
  * Retrieves all the rows in the active spreadsheet that contain data and logs the
  * values for each row.
@@ -126,8 +157,7 @@ function ImportJSON(url, query, options) {
  **/
 function ImportJSONAdvanced(url, query, options, includeFunc, transformFunc) {
 
-  let params = { "headers": { "Authorization": `Bearer ${SecureToken}` } };
-  var jsondata = UrlFetchApp.fetch(url, params);
+ var jsondata = hubspotFetch_(url);
   var object   = JSON.parse(jsondata.getContentText());
   
   return parseJSONObject_(object, query, options, includeFunc, transformFunc);
