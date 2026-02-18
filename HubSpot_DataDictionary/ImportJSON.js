@@ -19,15 +19,10 @@ function hubspotFetch_(url, fetchOptions) {
   var text = resp.getContentText();
 
   if (code < 200 || code >= 300) {
-    throw new Error("HubSpot request failed (" + code + "): " + text);
+    throw new Error("HubSpot request failed (" + code + ") for " + url + ": " + text);
   }
   return resp;
 }
-
-function setHubSpotToken_(token) {
-  PropertiesService.getScriptProperties().setProperty('HUBSPOT_PRIVATE_APP_TOKEN', token);
-}
-
 
 /**
  * Retrieves all the rows in the active spreadsheet that contain data and logs the
@@ -157,7 +152,7 @@ function ImportJSON(url, query, options) {
  **/
 function ImportJSONAdvanced(url, query, options, includeFunc, transformFunc) {
 
- var jsondata = hubspotFetch_(url);
+  var jsondata = hubspotFetch_(url);
   var object   = JSON.parse(jsondata.getContentText());
   
   return parseJSONObject_(object, query, options, includeFunc, transformFunc);
